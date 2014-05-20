@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studynung", "Studynung\Studynung.csproj", "{208720A9-CE4A-4D51-9AD1-63825FDC0726}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectiveEarthing.Logic", "ProtectiveEarthing.Logic\ProtectiveEarthing.Logic.csproj", "{2C914B24-95BB-46A4-9EE5-A9007279A7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPicker", "ContentPicker\ContentPicker.csproj", "{4776B6D4-B215-42A4-A9C2-3FDF25B45E86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{208720A9-CE4A-4D51-9AD1-63825FDC0726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{208720A9-CE4A-4D51-9AD1-63825FDC0726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{208720A9-CE4A-4D51-9AD1-63825FDC0726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{208720A9-CE4A-4D51-9AD1-63825FDC0726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C914B24-95BB-46A4-9EE5-A9007279A7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C914B24-95BB-46A4-9EE5-A9007279A7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C914B24-95BB-46A4-9EE5-A9007279A7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C914B24-95BB-46A4-9EE5-A9007279A7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4776B6D4-B215-42A4-A9C2-3FDF25B45E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4776B6D4-B215-42A4-A9C2-3FDF25B45E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4776B6D4-B215-42A4-A9C2-3FDF25B45E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4776B6D4-B215-42A4-A9C2-3FDF25B45E86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
