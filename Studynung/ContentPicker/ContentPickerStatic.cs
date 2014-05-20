@@ -65,14 +65,14 @@ namespace Studynung.ContentPicker
             foreach (var selectContentListItem in contentListItems)
             {
                 stringBuilder.Append("<tr>");
-                stringBuilder.AppendFormat("<td class='{1}'>{0}</td>", selectContentListItem.FirstColumnValue,
-                    string.Format("{0}_1", contentId));
-                if (!string.IsNullOrEmpty(selectContentListItem.SecondColumnValue))
-                    stringBuilder.AppendFormat("<td {1} class='{2}'>{0}</td> ", selectContentListItem.SecondColumnValue,
-                        selectContentListItem.IsVisibleSecond
-                        ? ""
-                        : "style='display:none;'",
-                    string.Format("{0}_2", contentId));
+                if (selectContentListItem.ContentItems != null)
+                    for (int i = 0; i < selectContentListItem.ContentItems.Count; i++)
+                    {
+                        ContentItem item = selectContentListItem.ContentItems[i];
+                        stringBuilder.AppendFormat("<td class='{0}' {1}>{2}</td>", string.Format("{0}_{1}", contentId, i),
+                            item.IsVisible ? "" : "style='display:none;'",
+                            item.Value);
+                    }
                 stringBuilder.AppendFormat("<td style='width: 0px;' class='{0}'><input type='hidden' value='" + selectContentListItem.Id + "'/></td> ",
                     string.Format("{0}_hidden", contentId));
                 stringBuilder.Append("</tr>");
@@ -96,7 +96,7 @@ namespace Studynung.ContentPicker
             stringBuilder.Append("$(this).css({ 'background': '#3399FF', 'color': 'white' });");
             stringBuilder.AppendFormat("$('#{0}').fadeToggle();", contentId);
             if (!string.IsNullOrEmpty(onSelectedFunc))
-                stringBuilder.AppendFormat("{0}(curId);", onSelectedFunc);
+                stringBuilder.AppendFormat("{0}(curId, $(this));", onSelectedFunc);
             stringBuilder.Append("});");
             stringBuilder.Append(string.Format("$('#{0}').click(function () {{", buttonId));
             stringBuilder.AppendFormat(

@@ -2,13 +2,14 @@
 @using System.Globalization
 @using System.Web.Mvc.Html
 @using Studynung.ContentPicker
+@using Studynung.Controllers
 @using Studynung.ProtectiveEarthing.Logic.Items
 @model List<Studynung.Database.User>
 @{
     BaseItem[] countGrounding = ViewBag.CountGrounding;
     BaseItemWithImage[] placementElectrodes = ViewBag.PlacementElectrodes;
     BaseItemWithImage[] groundDeviceTypes = ViewBag.GroundDeviceTypes;
-    LocationItem[] locationElectrodes = ViewBag.LocationElectrodes;
+    BaseItem[] locationElectrodes = ViewBag.LocationElectrodes;
     BaseItem[] materials = ViewBag.Materials;
     List<Studynung.ProtectiveEarthing.Items.ProfileSection> profileSections = ViewBag.ProfileSections;
     BaseItem[] typeSoils = ViewBag.TypeSoils;
@@ -30,37 +31,27 @@
     <form>
         <fieldset>
             <legend>Вибір максимально допустимого опору:</legend>
-            Виберіть Rдоп: @Html.ContentPicker("PcHaracteristic", countGrounding.Select(c => new SelectContentListItem() { FirstColumnValue = c.Name }))<br>
+            Виберіть Rдоп: @Html.ContentPicker("PcHaracteristic", ConvertHelper.ConvertBaseItem(countGrounding))<br>
         </fieldset>
     </form>
 
     <form>
         <fieldset>
             Виберіть вид заземлювачів(залежно від кількості електродів):
-            @Html.ContentPicker("PcCountGrounding", countGrounding.Select(c => new SelectContentListItem() { FirstColumnValue = c.Name, Id = c.Id }), "contentPicker.pcCountGroundingSelected")
+            @Html.ContentPicker("PcCountGrounding", ConvertHelper.ConvertBaseItem(countGrounding), "contentPicker.pcCountGroundingSelected")
             <br />
             <div class="div-blocks groupGrounding">
                 Виберіть спосіб розміщення електродів:
-                @Html.ContentPicker("PcFirstPlacementElectrodes", placementElectrodes.Select(c => new SelectContentListItem()
-                {
-                    FirstColumnValue = c.Name,
-                    SecondColumnValue = c.ImgSource,
-                    Id = c.Id
-                }), "contentPicker.pcFirstPlacementElectrodesSelected")
+                @Html.ContentPicker("PcFirstPlacementElectrodes", ConvertHelper.ConvertBaseItemWithImage(placementElectrodes), "contentPicker.pcFirstPlacementElectrodesSelected")
                 <br />
             </div>
             <div class="div-blocks groupGrounding">
                 Виберіть тип заземлюваного пристрою:
-                @Html.ContentPicker("PcGroundDeviceType", groundDeviceTypes.Select(c => new SelectContentListItem()
-                {
-                    FirstColumnValue = c.Name,
-                    SecondColumnValue = c.ImgSource,
-                    Id = c.Id
-                }), "contentPicker.pcGroundDeviceTypeSelected")
+                @Html.ContentPicker("PcGroundDeviceType", ConvertHelper.ConvertBaseItemWithImage(groundDeviceTypes), "contentPicker.pcGroundDeviceTypeSelected")
                 <br />
             </div>
             Виберіть тип розташування електродів:
-            @Html.ContentPicker("PcLocationElectrodes", locationElectrodes.Select(c => new SelectContentListItem() { FirstColumnValue = c.Name, Id = c.Id }), "contentPicker.pcLocationElectrodesTypeSelected")
+            @Html.ContentPicker("PcLocationElectrodes", ConvertHelper.ConvertBaseItem(locationElectrodes), "contentPicker.pcLocationElectrodesTypeSelected")
         </fieldset>
     </form>
 
@@ -70,17 +61,19 @@
             <legend> Найменші розміри заземлювачів і заземлювальних провідників </legend>
             @*Матеріал*@
             Виберіть матеріал:
-            @Html.ContentPicker("PcMaterial", materials.Select(c => new SelectContentListItem() { FirstColumnValue = c.Name, Id = c.Id }), "contentPicker.pcMaterialSelected")
+            @Html.ContentPicker("PcMaterial", ConvertHelper.ConvertBaseItem(materials), "contentPicker.pcMaterialSelected")
 
             @*Профіль перерізу для матеріалу*@
             Виберіть профіль перерізу:
-            @Html.ContentPicker("PcProfileSections", profileSections.Select(ps => new SelectContentListItem()
-            {
-                FirstColumnValue = ps.Name,
-                Id = ps.Id,
-                SecondColumnValue = ps.MaterialId.ToString(CultureInfo.InvariantCulture),
-                IsVisibleSecond = false
-            }), "contentPicker.pcProfileSectionsSelected", "contentPicker.pcProfileSectionsClick")
+            @Html.ContentPicker("PcProfileSections", ConvertHelper.ConvertProfileSection(profileSections), "contentPicker.pcProfileSectionsSelected", "contentPicker.pcProfileSectionsClick")
+
+            <div>
+                Діаметр: <input type="text" id="txtDiameter" />
+                <br />
+                Товщина стінки: <input type="text" id="txtThickness" />
+                <br />
+                Площа поперечного перерізу: <input type="text" id="txtSquare" />
+            </div>
         </fieldset>
     </form>
 
@@ -90,11 +83,11 @@
             <legend> Вибір табличного значення питомого опору ґрунту </legend>
             @*Тип ґрунту*@
             Виберіть тип ґрунту:
-            @Html.ContentPicker("PcTypeSoils", typeSoils.Select(c => new SelectContentListItem() { FirstColumnValue = c.Name, Id = c.Id }), "contentPicker.pcTypeSoilsSelected")
+            @Html.ContentPicker("PcTypeSoils", ConvertHelper.ConvertBaseItem(typeSoils), "contentPicker.pcTypeSoilsSelected")
 
             @*Питомий опір ґрунту*@
             Виберіть питомий опір ґрунту:
-            @Html.ContentPicker("PcResistivitySoils", resistivitySoils.Select(c => new SelectContentListItem() { FirstColumnValue = c.RecomendedValue.ToString(), Id = c.Id }),
+            @Html.ContentPicker("PcResistivitySoils", ConvertHelper.ConvertResistivitySoil(resistivitySoils),
                               "contentPicker.pcResistivitySoils")
         </fieldset>
     </form>
@@ -108,43 +101,27 @@
                     @*Виберіть тип електрода*@
                     <tr>
                         <td>
-                            Виберіть тип електрода: @Html.ContentPicker("PcFirstTypeElectrode", typeElectrode.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.Name,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcFirstTypeElectrodeSelected")
+                            Виберіть тип електрода: @Html.ContentPicker("PcFirstTypeElectrode", ConvertHelper.ConvertBaseItem(typeElectrode), "contentPicker.pcFirstTypeElectrodeSelected")
                         </td>
                         <td class="groupGrounding">
-                            Виберіть тип електрода: @Html.ContentPicker("PcSecondTypeElectrode", typeElectrode.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.Name,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcSecondTypeElectrodeSelected")
+                            Виберіть тип електрода: @Html.ContentPicker("PcSecondTypeElectrode", ConvertHelper.ConvertBaseItem(typeElectrode), "contentPicker.pcSecondTypeElectrodeSelected")
                         </td>
                     </tr>
                     @*Довжина електрода*@
                     <tr>
                         <td>
-                            Виберіть довжину електрода: @Html.ContentPicker("PcFirstLengthElectrode", verticalLengthElectrode.Select(i => new SelectContentListItem()
-                                                        {
-                                                            FirstColumnValue = i.Name,
-                                                            Id = i.Id
-                                                        }), "contentPicker.pcFirstLengthElectrodeSelected")
+                            Виберіть довжину електрода: @Html.ContentPicker("PcFirstLengthElectrode", ConvertHelper.ConvertBaseItem(verticalLengthElectrode), "contentPicker.pcFirstLengthElectrodeSelected")
                         </td>
                         <td class="groupGrounding">
-                            Виберіть довжину електрода: @Html.ContentPicker("PcSecondLengthElectrode", horizontalLengthElectrode.Select(i => new SelectContentListItem()
-                                                        {
-                                                            FirstColumnValue = i.Name,
-                                                            Id = i.Id
-                                                        }), "contentPicker.pcSecondLengthElectrodeSelected")
+                            Виберіть довжину електрода: @Html.ContentPicker("PcSecondLengthElectrode", ConvertHelper.ConvertBaseItem(horizontalLengthElectrode), "contentPicker.pcSecondLengthElectrodeSelected")
                         </td>
                     </tr>
                 </tbody>
             </table>
             @*Кліматична зона*@
-            Виберіть кліматичну зону: @Html.ContentPicker("PcHeaven", heaven.Select(i => new SelectContentListItem() { FirstColumnValue = i.Name, Id = i.Id }), "contentPicker.pcHeaven") <br />
+            Виберіть кліматичну зону: @Html.ContentPicker("PcHeaven", ConvertHelper.ConvertBaseItem(heaven), "contentPicker.pcHeaven") <br />
             @*Вологість землі*@
-            Виберіть вологість землі: @Html.ContentPicker("PcHumidity", humidity.Select(i => new SelectContentListItem() { FirstColumnValue = i.Name, Id = i.Id }), "contentPicker.pcHumidity") <br />
+            Виберіть вологість землі: @Html.ContentPicker("PcHumidity", ConvertHelper.ConvertBaseItem(humidity), "contentPicker.pcHumidity") <br />
         </fieldset>
     </form>
 
@@ -157,37 +134,19 @@
                     <tr>
                         @*Тип заземлювача*@
                         <td>
-                            Виберіть тип електрода: @Html.ContentPicker("PcFirstGroundItemType", groundItems.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.Name,
-                                                        SecondColumnValue = i.SchemeSource,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcFirstGroundItemType")
+                            Виберіть тип електрода: @Html.ContentPicker("PcFirstGroundItemType", groundItems.ConvertGroundItemWithScheme(), "contentPicker.pcFirstGroundItemType")
                         </td>
                         <td class="groupGrounding">
-                            Виберіть тип електрода: @Html.ContentPicker("PcSecondGroundItemType", groundItems.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.Name,
-                                                        SecondColumnValue = i.SchemeSource,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcSecondGroundItemType")
+                            Виберіть тип електрода: @Html.ContentPicker("PcSecondGroundItemType", groundItems.ConvertGroundItemWithScheme(), "contentPicker.pcSecondGroundItemType")
                         </td>
                     </tr>
                     <tr>
                         @*Формула розрахунку*@
                         <td>
-                            Виберіть тип електрода: @Html.ContentPicker("PcFirstFormula", groundItems.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.FormulaSource,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcFirstFormula")
+                            Виберіть тип електрода: @Html.ContentPicker("PcFirstFormula", groundItems.ConvertGroundItemWithFormula(), "contentPicker.pcFirstFormula")
                         </td>
                         <td class="groupGrounding">
-                            Виберіть тип електрода: @Html.ContentPicker("PcSecondFormula", groundItems.Select(i => new SelectContentListItem()
-                                                    {
-                                                        FirstColumnValue = i.FormulaSource,
-                                                        Id = i.Id
-                                                    }), "contentPicker.pcSecondFormula")
+                            Виберіть тип електрода: @Html.ContentPicker("PcSecondFormula", groundItems.ConvertGroundItemWithFormula(), "contentPicker.pcSecondFormula")
                         </td>
                     </tr>
                 </tbody>

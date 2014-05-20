@@ -3,3 +3,8 @@ C:\Users\Nick\Documents\GitHub\studynung\Studynung\ProtectiveEarthing.Logic\bin\
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.csprojResolveAssemblyReference.cache
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.dll
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.pdb
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\bin\Debug\ProtectiveEarthing.Logic.dll
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\bin\Debug\ProtectiveEarthing.Logic.pdb
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.csprojResolveAssemblyReference.cache
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.dll
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Debug\ProtectiveEarthing.Logic.pdb

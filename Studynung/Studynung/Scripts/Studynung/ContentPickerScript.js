@@ -25,7 +25,11 @@ contentPicker = {
         this.isGroupGrounding = false;
         this.isMaterialSelected = false;
         this.isCanLoadProfileSections = false;
+        this.isSoilValueValid = false;
+        this.isSoilDataInsert = false;
 
+        // private fields
+        this._soilIdForResistivitySoil = -1;
     },
 
     verificationData: function () {
@@ -65,12 +69,20 @@ contentPicker = {
     _verifyIds: function() {
         this.isGroupGrounding = this.countGroundingId == 1;
         this.isMaterialSelected = this.materialId != -1;
+        this.isSoilDataInsert = this.typeSoilsId != -1 && this.resistivitySoilsId != -1;
+        this.isSoilValueValid = $.inArray(this.typeSoilsId, this._soilIdForResistivitySoil.split(';')) != -1 && this.typeSoilsId != -1;
     },
     _applyVerify: function() {
         if (this.isGroupGrounding) {
             $(".groupGrounding").fadeIn();
         } else {
             $(".groupGrounding").fadeOut();
+        }
+        if (!this.isSoilValueValid && this.isSoilDataInsert) {
+            alert("Питомий опір ґрунту не відповідає даному типу ґрунту");
+            this.resistivitySoilsId = -1;
+            this._soilIdForResistivitySoil = -1;
+            $("#PcResistivitySoils_contentPicker_textbox").val("");
         }
     },
 
@@ -92,7 +104,7 @@ contentPicker = {
     },
     pcMaterialSelected: function (id) {
         this.materialId = id;
-        $(".PcProfileSections_selectItems_2").each(function () {
+        $(".PcProfileSections_selectItems_1").each(function () {
             if ($(this).html() != id) {
                 $(this).parent().fadeOut();
             } else {
@@ -101,8 +113,14 @@ contentPicker = {
         });
         contentPicker.verificationData();
     },
-    pcProfileSectionsSelected: function (id) {
+    pcProfileSectionsSelected: function (id, row) {
         this.profileSectionsId = id;
+        var diameter = row.find('.PcProfileSections_selectItems_2').html();
+        var thickness = row.find('.PcProfileSections_selectItems_3').html();
+        var square = row.find('.PcProfileSections_selectItems_4').html();
+        $('#txtDiameter').val(diameter);
+        $('#txtThickness').val(thickness);
+        $('#txtSquare').val(square);
         contentPicker.verificationData();
     },
 
@@ -119,8 +137,9 @@ contentPicker = {
         this.typeSoilsId = id;
         contentPicker.verificationData();
     },
-    pcResistivitySoils: function (id) {
+    pcResistivitySoils: function (id, row) {
         this.resistivitySoilsId = id;
+        this._soilIdForResistivitySoil = row.find('.PcResistivitySoils_selectItems_1').html();
         contentPicker.verificationData();
     },
     pcFirstTypeElectrodeSelected: function (id) {

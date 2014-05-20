@@ -17,7 +17,7 @@ namespace Studynung.ProtectiveEarthing.Items
 
         public string StringSquare
         {
-            get { return (Square == -1) ? "-" : string.Format("{0} мм^2", Square); }
+            get { return (Square == -1) ? "-" : string.Format("{0} мм²", Square); }
         }
 
         public string StringThickness
