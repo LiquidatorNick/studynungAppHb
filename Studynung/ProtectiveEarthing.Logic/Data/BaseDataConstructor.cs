@@ -24,6 +24,17 @@ namespace Studynung.ProtectiveEarthing.Logic
             InitHeaven();
             InitHumidity();
             InitGroundItems();
+            InitRatioDistanceWithLength();
+        }
+
+        private void InitRatioDistanceWithLength()
+        {
+            RatioDistanceWithLength = new[]
+            {
+                new BaseItem(){Id = 0, Name = "1"}, 
+                new BaseItem(){Id = 1, Name = "2"}, 
+                new BaseItem(){Id = 2, Name = "3"} 
+            };
         }
 
         protected void InitCountGrounding()
@@ -179,8 +190,8 @@ namespace Studynung.ProtectiveEarthing.Logic
         {
             HorizontalLengthElectrode = new[]
             {
-                new BaseItem() {Id = 2, Name = "10"},
-                new BaseItem() {Id = 3, Name = "50"}
+                new BaseItem() {Id = 0, Name = "10"},
+                new BaseItem() {Id = 1, Name = "50"}
             };
         }
 

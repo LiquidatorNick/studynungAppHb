@@ -39,5 +39,6 @@ namespace Studynung.ProtectiveEarthing.Logic
         public BaseItem[] Humidity { get; protected set; }
 
         public List<GroundItem> GroundItems { get; set; }
+        public BaseItem[] RatioDistanceWithLength { get; set; }
     }
 }

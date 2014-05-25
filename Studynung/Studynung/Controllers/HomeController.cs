@@ -245,6 +245,7 @@ namespace Studynung.Controllers
             ViewBag.Heaven = BaseData.GetInstance().Heaven;
             ViewBag.Humidity = BaseData.GetInstance().Humidity;
             ViewBag.GroundItems = BaseData.GetInstance().GroundItems.ToArray();
+            ViewBag.RatioDistanceWithLength = BaseData.GetInstance().RatioDistanceWithLength;
             return View();
         }
 

@@ -20,6 +20,7 @@ contentPicker = {
         this.secondGroundItemTypeId = -1;
         this.firstFormulaId = -1;
         this.secondFormulaId = -1;
+        this.ratioDistanceWithLength = -1;
 
         // Verification items
         this.isGroupGrounding = false;
@@ -165,7 +166,7 @@ contentPicker = {
             //logManager.appendLine("Коефіцієнт сезонності(верт.): " + kcVert);
         }
         if (this.isCanCalcKcHoriz) {
-            var kcHoriz = fieldsManager.KcMatrix['1' + this.heavenId + this.humidityId + this.firstLengthElectrodeId];
+            var kcHoriz = fieldsManager.KcMatrix['1' + this.heavenId + this.humidityId + this.secondLengthElectrodeId];
             fieldsManager.KcHoriz = kcHoriz;
             //logManager.appendLine("Коефіцієнт сезонності(гориз.): " + kcHoriz);
         }
@@ -195,32 +196,37 @@ contentPicker = {
                 fieldsManager.Rvert = resultVert;
             }
         }
-        if (this.isCanFirstCalc) {
-            var fieldsHoriz = new TempFields(fieldsManager.t, fieldsManager.Lhoriz, fieldsManager.Lvert, fieldsManager.t0, fieldsManager.KcVertical,
-                fieldsManager.d, fieldsManager.D, fieldsManager.a, fieldsManager.b);
-            var resultHoriz = formulas.calculate(this.SecondFormulaId, fieldsHoriz);
+        if (this.isCanSecondCalc) {
+            fieldsManager.t = formulas.calculate_t(parseFloat(fieldsManager.t0), parseFloat(fieldsManager.Lhoriz));
+            var fieldsHoriz = new TempFields(parseFloat(fieldsManager.t), parseFloat(fieldsManager.Lhoriz), parseFloat(fieldsManager.Lvert),
+                parseFloat(fieldsManager.t0), parseFloat(fieldsManager.RorHoriz), parseFloat(fieldsManager.d) / 1000,
+                parseFloat(fieldsManager.D), parseFloat(fieldsManager.a), parseFloat(fieldsManager.b));
+            var resultHoriz = formulas.calculate(this.secondFormulaId, fieldsHoriz);
             fieldsManager.Rhoriz = resultHoriz;
         }
     },
     _toLog: function () {
         logManager.clear();
-        if (fieldsManager.Rdop != NaN) {
+        if (!isNaN(fieldsManager.Rdop)) {
             logManager.appendLine("Допустимий опір: " + fieldsManager.Rdop + " Ом");
         }
-        if (this.isCanCalcKcVertical && fieldsManager.KcVertical != NaN) {
+        if (this.isCanCalcKcVertical && !isNaN(fieldsManager.KcVertical)) {
             logManager.appendLine("Коефіцієнт сезонності(верт.): " + fieldsManager.KcVertical);
         }
-        if (this.isCanCalcKcHoriz && fieldsManager.KcHoriz != NaN) {
+        if (this.isCanCalcKcHoriz && !isNaN(fieldsManager.KcHoriz)) {
             logManager.appendLine("Коефіцієнт сезонності(гориз.): " + fieldsManager.KcHoriz);
         }
-        if (this.isShowVerticalRor && fieldsManager.RorVert != NaN) {
-            logManager.appendLine("Розрахункове значення питомого опору грунту рівне(верт.): " + fieldsManager.RorVert);
+        if (this.isShowVerticalRor && !isNaN(fieldsManager.RorVert)) {
+            logManager.appendLine("Розрахункове значення питомого опору ґрунту рівне(верт.): " + fieldsManager.RorVert);
         }
-        if (this.isShowHorizRor && fieldsManager.RorHoriz != NaN) {
-            logManager.appendLine("Розрахункове значення питомого опору грунту рівне(гориз.): " + fieldsManager.RorHoriz);
+        if (this.isShowHorizRor && !isNaN(fieldsManager.RorHoriz)) {
+            logManager.appendLine("Розрахункове значення питомого опору ґрунту рівне(гориз.): " + fieldsManager.RorHoriz);
         }
-        if (fieldsManager.Rvert != NaN) {
-            logManager.appendLine("Результат розрахунку опору розтіканню струму: " + fieldsManager.Rvert);
+        if (!isNaN(fieldsManager.Rvert)) {
+            logManager.appendLine("Результат розрахунку опору розтіканню струму(верт.): " + fieldsManager.Rvert);
+        }
+        if (!isNaN(fieldsManager.Rhoriz)) {
+            logManager.appendLine("Результат розрахунку опору розтіканню струму(гориз.): " + fieldsManager.Rhoriz);
         }
         logManager.show();
     },
@@ -329,6 +335,10 @@ contentPicker = {
     },
     pcSecondFormula: function (id) {
         this.secondFormulaId = id;
+        contentPicker.verificationData();
+    },
+    pcRatioDistanceWithLengthSelected: function (id) {
+        this.ratioDistanceWithLength = id;
         contentPicker.verificationData();
     }
 }
@@ -509,9 +519,13 @@ formulas = {
     },
 
     fourFormula: function (fields) {
-        var d = 0.5 * fields.d;
-        var t = fields.t0;
-        return (fields.Ror / (2 * Math.PI * fields.firstL)) * Math.Log(Math.Pow(fields.firstL, 2) / (d * t));
+        try {
+            var d = 0.5 * fields.d;
+            var t = fields.t0;
+            return (fields.Ror / (2 * Math.PI * fields.firstL)) * Math.log(Math.pow(fields.firstL, 2) / (d * t));
+        } catch (e) {
+            return NaN;
+        } 
     },
 
     fiveFormula: function (fields) {

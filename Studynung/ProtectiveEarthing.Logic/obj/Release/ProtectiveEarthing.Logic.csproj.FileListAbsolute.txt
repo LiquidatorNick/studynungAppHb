@@ -7,4 +7,3 @@ C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic
 C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\bin\Release\ProtectiveEarthing.Logic.pdb
 C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Release\ProtectiveEarthing.Logic.dll
 C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Release\ProtectiveEarthing.Logic.pdb
-C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ProtectiveEarthing.Logic\obj\Release\ProtectiveEarthing.Logic.csprojResolveAssemblyReference.cache
