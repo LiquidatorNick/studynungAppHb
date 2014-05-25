@@ -179,8 +179,8 @@ namespace Studynung.ProtectiveEarthing.Logic
         {
             HorizontalLengthElectrode = new[]
             {
-                new BaseItem() {Id = 0, Name = "10"},
-                new BaseItem() {Id = 1, Name = "50"}
+                new BaseItem() {Id = 2, Name = "10"},
+                new BaseItem() {Id = 3, Name = "50"}
             };
         }
 

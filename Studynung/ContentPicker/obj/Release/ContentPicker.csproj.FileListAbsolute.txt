@@ -3,3 +3,8 @@ C:\Users\Nick\Documents\GitHub\studynung\Studynung\ContentPicker\bin\Release\Con
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ContentPicker\obj\Release\ContentPicker.csprojResolveAssemblyReference.cache
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ContentPicker\obj\Release\ContentPicker.dll
 C:\Users\Nick\Documents\GitHub\studynung\Studynung\ContentPicker\obj\Release\ContentPicker.pdb
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ContentPicker\bin\Release\ContentPicker.dll
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ContentPicker\bin\Release\ContentPicker.pdb
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ContentPicker\obj\Release\ContentPicker.dll
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ContentPicker\obj\Release\ContentPicker.pdb
+C:\Users\Nick\Documents\GitHub\studynungAppHb\Studynung\ContentPicker\obj\Release\ContentPicker.csprojResolveAssemblyReference.cache

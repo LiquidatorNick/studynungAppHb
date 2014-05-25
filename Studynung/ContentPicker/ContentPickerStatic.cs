@@ -16,7 +16,7 @@ namespace Studynung.ContentPicker
 
         private static int _itemIndex = 0;
 
-        public static MvcHtmlString ContentPicker(this HtmlHelper htmlHelper, string name, IEnumerable<SelectContentListItem> contentListItems,
+        public static MvcHtmlString ContentPickerStandart(this HtmlHelper htmlHelper, string name, IEnumerable<SelectContentListItem> contentListItems,
             string onSelectedFunc = null, string onClickFunc = null)
         {
             _itemIndex++;
@@ -36,6 +36,27 @@ namespace Studynung.ContentPicker
             var div = new TagBuilder("div")
             {
                 InnerHtml = string.Format("{0}{1}", tableBuilder, AppendScript(textboxId, buttonId, contentId, hiddenId, onSelectedFunc, onClickFunc)),
+            };
+            div.Attributes.Add("id", name);
+            return new MvcHtmlString(div.ToString());
+        }
+
+        public static MvcHtmlString ContentPickerCustom(this HtmlHelper htmlHelper, string name,
+            string content, string onClickFunc = null)
+        {
+            _itemIndex++;
+            string textboxId = string.Format("{0}_contentPicker_textbox", name);
+            string buttonId = string.Format("{0}_btnselect", name);
+            string contentId = string.Format("{0}_selectItems", name);
+            string hiddenId = string.Format("{0}_contentPicker_hidden", name);
+            var tableBuilder = new TagBuilder("table")
+            {
+                InnerHtml = string.Format("<tbody> {0} <tr> <td> <div style='{1}'> {2} </div> </td> </tr> </tbody>", MainPart(textboxId, buttonId, hiddenId), ContentDivStyle, content)
+            };
+            tableBuilder.AddCssClass("tableContentPicker");
+            var div = new TagBuilder("div")
+            {
+                InnerHtml = string.Format("{0}<script>{1}</script>", tableBuilder, ButtonSelectScript(buttonId, contentId,onClickFunc)),
             };
             div.Attributes.Add("id", name);
             return new MvcHtmlString(div.ToString());
@@ -98,13 +119,20 @@ namespace Studynung.ContentPicker
             if (!string.IsNullOrEmpty(onSelectedFunc))
                 stringBuilder.AppendFormat("{0}(curId, $(this));", onSelectedFunc);
             stringBuilder.Append("});");
+            stringBuilder.Append(ButtonSelectScript(buttonId, contentId, onClickFunc));
+            stringBuilder.Append("</script>");
+            return stringBuilder.ToString();
+        }
+
+        private static string ButtonSelectScript(string buttonId, string contentId, string onClickFunc)
+        {
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(string.Format("$('#{0}').click(function () {{", buttonId));
             stringBuilder.AppendFormat(
                 string.IsNullOrEmpty(onClickFunc)
                 ? string.Format("$('#{0}').fadeToggle();", contentId)
                 : string.Format("{0}($('#{1}'));", onClickFunc, contentId));
             stringBuilder.Append("});");
-            stringBuilder.Append("</script>");
             return stringBuilder.ToString();
         }
     }

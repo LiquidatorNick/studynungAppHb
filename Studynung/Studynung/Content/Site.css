@@ -317,3 +317,22 @@ img {
 .showItem {
     display: block;
 }
+
+.sn-table
+{
+border-collapse:collapse;
+}
+.sn-table, .sn-table-td
+{
+border: 1px solid black;
+}
+
+.sn-table-td-only-right
+{
+border-right: 1px solid black;
+}
+
+.sn-table-td-only-bottom
+{
+    border-bottom: 1px solid black;
+}
