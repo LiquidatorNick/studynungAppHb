@@ -34,7 +34,7 @@ namespace Studynung.Controllers
                 builder.Append("   </tr>");
                 builder.Append("   <tr class='tableHaracteristic-tr'>");
                 builder.Append("       <td class='sn-table-td'>1. Захисне заземлення в установках з великими струмами замикання на землю (500 А та більше)</td>");
-                builder.Append("       <td class='sn-table-td'>0,5</td>");
+                builder.Append("       <td class='sn-table-td'>0.5</td>");
                 builder.Append("   </tr>");
                 builder.Append("   <tr>");
                 builder.Append("       <td class='sn-table-td'>2. Захисне заземлення в установках з малими струмами  замикання на землю (до 500 А):</td> ");

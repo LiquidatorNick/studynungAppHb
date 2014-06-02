@@ -290,7 +290,6 @@ input[type=button], input[type=reset], input[type=submit] {
 }
 
 .study-block {
-    
 }
 
 img {
@@ -303,11 +302,10 @@ img {
 }
 
 .groupGroundingVisible {
-    display: block
+    display: block;
 }
 
 .div-blocks {
-    
 }
 
 .hideItem {
@@ -318,25 +316,53 @@ img {
     display: block;
 }
 
-.sn-table
-{
-border-collapse:collapse;
-}
-.sn-table, .sn-table-td
-{
-border: 1px solid black;
+.sn-table {
+    border-collapse: collapse;
 }
 
-.sn-table-td-only-right
-{
-border-right: 1px solid black;
+.sn-table, .sn-table-td {
+    border: 1px solid black;
 }
 
-.sn-table-td-only-bottom
-{
+.sn-table-td-only-right {
+    border-right: 1px solid black;
+}
+
+.sn-table-td-only-bottom {
     border-bottom: 1px solid black;
 }
 
 #div-continue {
     /*display: none*/
+}
+
+#footer {
+    position: fixed;
+    bottom: 0px;
+}
+
+.tabs li {
+				list-style:none;
+				display:inline;
+			}
+
+			.tabs a {
+				padding:5px 10px;
+				display:inline-block;
+				background:#ffffff;
+				color:#fff;
+				text-decoration:none;
+			}
+
+			.tabs a.active {
+				background:#333333;
+				color:#fffafa;
+			}
+
+.hideContinue {
+    display: none;
+}
+
+.showContinue {
+    display: block;
 }

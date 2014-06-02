@@ -37,6 +37,7 @@ contentPicker = {
         this.isCanFirstCalc = false;
         this.isCanSecondCalc = false;
         this.isResistivitySoilInsert = false;
+        this.isContinue = false;
 
         // show properties
         this.isShowVerticalRor = false;
@@ -197,12 +198,25 @@ contentPicker = {
             }
         }
         if (this.isCanSecondCalc) {
-            fieldsManager.t = formulas.calculate_t(parseFloat(fieldsManager.t0), parseFloat(fieldsManager.Lhoriz));
+            fieldsManager.t = formulas.calculate_t(parseFloat(fieldsManager.t0), parseFloat(fieldsManager.Lvert));
             var fieldsHoriz = new TempFields(parseFloat(fieldsManager.t), parseFloat(fieldsManager.Lhoriz), parseFloat(fieldsManager.Lvert),
                 parseFloat(fieldsManager.t0), parseFloat(fieldsManager.RorHoriz), parseFloat(fieldsManager.d) / 1000,
                 parseFloat(fieldsManager.D), parseFloat(fieldsManager.a), parseFloat(fieldsManager.b));
             var resultHoriz = formulas.calculate(this.secondFormulaId, fieldsHoriz);
             fieldsManager.Rhoriz = resultHoriz;
+        }
+        if (!isNaN(fieldsManager.Rvert) || !isNaN(fieldsManager.Rhoriz)) {
+            if (fieldsManager.Rvert > fieldsManager.Rdop || fieldsManager.Rhoriz > fieldsManager.Rdop) {
+                this.isContinue = true;
+                this.continueToCompute();
+            }
+        } else {
+            this.isContinue = false;
+        }
+        if (this.isContinue) {
+            $("#div-continue").fadeIn();
+        } else {
+            $("#div-continue").fadeOut();
         }
     },
     _toLog: function () {
@@ -228,7 +242,70 @@ contentPicker = {
         if (!isNaN(fieldsManager.Rhoriz)) {
             logManager.appendLine("Результат розрахунку опору розтіканню струму(гориз.): " + fieldsManager.Rhoriz);
         }
+        if (!isNaN(fieldsManager.Rvert) || !isNaN(fieldsManager.Rhoriz)) {
+            if (fieldsManager.Rvert > fieldsManager.Rdop || fieldsManager.Rhoriz > fieldsManager.Rdop) {
+                logManager.appendLine("Значення R є більшим за допустиме");
+            } else {
+                alert("Значення R в межах норми.");
+                logManager.appendLine("Значення R в межах норми");
+            }
+        }
+        if (this.isContinue) {
+            logManager.appendLine("Рекомендована кількість електродів: " + fieldsManager.countElectrodesWithoutNude);
+            if (!isNaN(fieldsManager.nudeVert)) {
+                logManager.appendLine("η(верт.): " + fieldsManager.nudeVert);
+            }
+            logManager.appendLine("Рекомендована кількість електродів з врахуванням η: " + fieldsManager.countElectrodesWithNude);
+            if (!isNaN(fieldsManager.Rz))
+                logManager.appendLine("Rз: " + fieldsManager.Rz);
+        }
         logManager.show();
+    },
+
+    continueToCompute: function () {
+
+        var countElectrodes = Math.ceil(fieldsManager.Rvert / fieldsManager.Rdop);
+        fieldsManager.countElectrodes = countElectrodes;
+        fieldsManager.countElectrodesWithoutNude = countElectrodes;
+        var firstNude = utilizationEarthing.findNude(this.firstPlacementElectrodesId, countElectrodes, this.ratioDistanceWithLength);
+        fieldsManager.nudeVert = firstNude;
+        // Обчислення n(штріх) ------------------------------------------------------------------------------------
+
+        var countElectrodesWithNude = formulas.calculateCountElectrodesWithNude(fieldsManager.Rvert,
+                fieldsManager.Rdop, fieldsManager.nudeVert);
+        fieldsManager.countElectrodesWithNude = countElectrodesWithNude;
+        fieldsManager.countElectrodes = countElectrodesWithNude;
+        // --------------------------------------------------------------------------------------------------------
+
+        // Refresh firstnude --------------------------------------------------------------------------------------
+        fieldsManager.nudeVert = utilizationEarthing.findNude(this.firstPlacementElectrodesId, fieldsManager.countElectrodes,
+            this.ratioDistanceWithLength);
+        //---------------------------------------------------------------------------------------------------------
+
+        // Знаходження Rрозр.в. -----------------------------------------------------------------------------------
+        var Rvert = fieldsManager.Rvert / (fieldsManager.countElectrodesWithNude * fieldsManager.nudeVert);
+        // --------------------------------------------------------------------------------------------------------
+
+        // Довжина горизонтальних електродів для умови комбінованого заземлення -----------------------------------
+        var k = fieldsManager.ratioDistanceWithLength;
+        var a = k * fieldsManager.Lvert;
+        var L = this.firstPlacementElectrodesId == 1
+            ? (fieldsManager.countElectrodes * a)
+            : (a * (fieldsManager.countElectrodes - 1));
+        fieldsManager.Lhoriz = L;
+        // --------------------------------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------
+        var isOnRow = this.firstPlacementElectrodesId == 0;
+        // Знаходження Rрозр.г. -----------------------------------------------------------------------------------
+        fieldsManager.nudeHoriz = utilizationEarthing.findNude(2, fieldsManager.countElectrodes, this.ratioDistanceWithLength, isOnRow);
+        var Rhoriz = fieldsManager.Rhoriz / fieldsManager.nudeHoriz;
+        // --------------------------------------------------------------------------------------------------------
+
+        // --------------------------------------------------------------------------------------------------------
+        var Rz = (Rvert * Rhoriz) / (Rvert + Rhoriz);
+        fieldsManager.Rz = Rz;
+        //_log.Rz = string.Format("Rz: {0}", Math.Round(Rz, 2));
+        // --------------------------------------------------------------------------------------------------------
     },
 
     pcCountGroundingSelected: function (id) {
@@ -339,6 +416,9 @@ contentPicker = {
     },
     pcRatioDistanceWithLengthSelected: function (id) {
         this.ratioDistanceWithLength = id;
+        if (id != -1) {
+            fieldsManager.ratioDistanceWithLength = parseInt(id) + 1;
+        }
         contentPicker.verificationData();
     }
 }
@@ -377,6 +457,13 @@ fieldsManager = {
     RorHoriz: NaN,
     Rvert: NaN,
     Rhoriz: NaN,
+    Rz: NaN,
+    countElectrodes: NaN,
+    countElectrodesWithoutNude: NaN,
+    countElectrodesWithNude: NaN,
+    nudeVert: NaN,
+    nudeHoriz: NaN,
+    ratioDistanceWithLength: NaN,
     KcMatrix: {
         "0000": 1.9,
         "0001": 1.5,
@@ -521,11 +608,11 @@ formulas = {
     fourFormula: function (fields) {
         try {
             var d = 0.5 * fields.d;
-            var t = fields.t0;
+            var t = fields.t;
             return (fields.Ror / (2 * Math.PI * fields.firstL)) * Math.log(Math.pow(fields.firstL, 2) / (d * t));
         } catch (e) {
             return NaN;
-        } 
+        }
     },
 
     fiveFormula: function (fields) {
@@ -568,5 +655,280 @@ formulas = {
         if (t0 == -1)
             return NaN;
         return t0 + (l / 2);
+    },
+
+    calculateCountElectrodesWithNude: function (Rv, Rdop, nude) {
+        return Math.ceil(Rv / (Rdop * nude));
+    }
+},
+
+utilizationEarthing = {
+    findNude: function (placementElectrodeId, countElectrodes, ratioDWLId, isOnRow) {
+        if (placementElectrodeId != -1 && countElectrodes != -1 && ratioDWLId != -1)
+            if (placementElectrodeId == 2) {
+                if (isOnRow != null)
+                    return utilizationEarthing.FindNudeHoriz(countElectrodes, ratioDWLId, isOnRow);
+            }
+            else {
+                return utilizationEarthing.FindFromTableSix(placementElectrodeId, countElectrodes, ratioDWLId);
+            }
+        return NaN;
+    },
+    FindFromTableSix: function (placementElectrodeId, countElectrodes, ratioDWLId) {
+        var idCE = utilizationEarthing.GetCountElectrodesId(countElectrodes);
+        if (placementElectrodeId == 0) {
+            return utilizationEarthing.TableSixPartOne(idCE, ratioDWLId);
+        }
+        else {
+            return utilizationEarthing.TableSixPartTwo(idCE, ratioDWLId);
+        }
+    },
+    GetCountElectrodesId: function (countElectrodes) {
+        if (countElectrodes == 2) {
+            return 0;
+        }
+        else if (countElectrodes == 3) {
+            return 1;
+        }
+        else if (countElectrodes == 4) {
+            return 2;
+        }
+        else if (countElectrodes == 5) {
+            return 3;
+        }
+        else if (countElectrodes >= 6 && countElectrodes < 10) {
+            return 4;
+        }
+        else if (countElectrodes >= 10 && countElectrodes < 15) {
+            return 5;
+        }
+        else if (countElectrodes >= 15 && countElectrodes < 20) {
+            return 6;
+        }
+        else if (countElectrodes >= 20 && countElectrodes < 40) {
+            return 7;
+        }
+        else if (countElectrodes >= 40 && countElectrodes < 60) {
+            return 8;
+        }
+        else if (countElectrodes >= 60 && countElectrodes < 100) {
+            return 9;
+        }
+        else if (countElectrodes == 100) {
+            return 10;
+        }
+        return -1;
+    },
+    FindNudeHoriz: function (countElectrodes, ratioDWLId, isOnRow) {
+        var idCE = utilizationEarthing.GetCountElectrodesIdFromHoriz(countElectrodes);
+        return isOnRow ? utilizationEarthing.TableHorizOnRow(ratioDWLId, idCE) : utilizationEarthing.TableHorizOnContour(ratioDWLId, idCE);
+    },
+    GetCountElectrodesIdFromHoriz: function (countElectrodes) {
+        if (countElectrodes >= 2 && countElectrodes < 4) {
+            return 0;
+        }
+        else if (countElectrodes == 4) {
+            return 1;
+        }
+        else if (countElectrodes == 5) {
+            return 2;
+        }
+        else if (countElectrodes >= 6 && countElectrodes < 8) {
+            return 3;
+        }
+        else if (countElectrodes >= 8 && countElectrodes < 10) {
+            return 4;
+        }
+        else if (countElectrodes >= 10 && countElectrodes < 20) {
+            return 5;
+        }
+        else if (countElectrodes >= 20 && countElectrodes < 30) {
+            return 6;
+        }
+        else if (countElectrodes >= 30 && countElectrodes < 40) {
+            return 7;
+        }
+        else if (countElectrodes >= 40 && countElectrodes < 50) {
+            return 8;
+        }
+        else if (countElectrodes >= 50 && countElectrodes < 60) {
+            return 9;
+        }
+        else if (countElectrodes >= 60 && countElectrodes < 70) {
+            return 10;
+        }
+        else if (countElectrodes >= 70 && countElectrodes < 100) {
+            return 11;
+        }
+        else if (countElectrodes == 100) {
+            return 12;
+        }
+        return -1;
+    },
+    TableSixPartOne: function (i, j) {
+        var matrix = {
+            "00": 0.85,
+            "01": 0.91,
+            "02": 0.94,
+            "10": 0.78,
+            "11": 0.87,
+            "12": 0.91,
+            "20": 0.73,
+            "21": 0.83,
+            "22": 0.89,
+            "30": 0.70,
+            "31": 0.81,
+            "32": 0.87,
+            "40": 0.65,
+            "41": 0.77,
+            "42": 0.85,
+            "50": 0.59,
+            "51": 0.74,
+            "52": 0.81,
+            "60": 0.54,
+            "61": 0.70,
+            "62": 0.78,
+            "70": 0.48,
+            "71": 0.67,
+            "72": 0.76,
+            "80": NaN,
+            "81": NaN,
+            "82": NaN,
+            "90": NaN,
+            "91": NaN,
+            "92": NaN,
+            "100": NaN,
+            "101": NaN,
+            "102": NaN
+        }
+        return matrix[i + j + ""];
+    },
+    TableSixPartTwo: function (i, j) {
+        var matrix = {
+            "00": NaN,
+            "01": NaN,
+            "02": NaN,
+            "10": NaN,
+            "11": NaN,
+            "12": NaN,
+            "20": 0.69,
+            "21": 0.78,
+            "22": 0.85,
+            "30": NaN,
+            "31": NaN,
+            "32": NaN,
+            "40": 0.61,
+            "41": 0.73,
+            "42": 0.80,
+            "50": 0.56,
+            "51": 0.68,
+            "52": 0.76,
+            "60": NaN,
+            "61": NaN,
+            "62": NaN,
+            "70": 0.47,
+            "71": 0.63,
+            "72": 0.72,
+            "80": 0.41,
+            "81": 0.58,
+            "82": 0.66,
+            "90": 0.39,
+            "91": 0.55,
+            "92": 0.64,
+            "100": 0.36,
+            "101": 0.52,
+            "102": 0.62
+        }
+        return matrix[i + j + ""];
+    },
+    TableHorizOnRow: function (i, j) {
+        var matrix = {
+            "00": 0.85,
+            "01": 0.94,
+            "02": 0.96,
+            "10": 0.77,
+            "11": 0.89,
+            "12": 0.92,
+            "20": 0.74,
+            "21": 0.86,
+            "22": 0.90,
+            "30": 0.72,
+            "31": 0.84,
+            "32": 0.88,
+            "40": 0.67,
+            "41": 0.79,
+            "42": 0.85,
+            "50": 0.62,
+            "51": 0.75,
+            "52": 0.82,
+            "60": 0.42,
+            "61": 0.56,
+            "62": 0.68,
+            "70": 0.31,
+            "71": 0.46,
+            "72": 0.58,
+            "80": NaN,
+            "81": NaN,
+            "82": NaN,
+            "90": 0.21,
+            "91": 0.36,
+            "92": 0.49,
+            "100": NaN,
+            "101": NaN,
+            "102": NaN,
+            "110": NaN,
+            "111": NaN,
+            "112": NaN,
+            "120": NaN,
+            "121": NaN,
+            "122": NaN
+        }
+        return matrix[j + i];
+    },
+    TableHorizOnContour: function (i, j) {
+        var matrix = {
+            "00": NaN,
+            "01": NaN,
+            "02": NaN,
+            "10": 0.45,
+            "11": 0.55,
+            "12": 0.70,
+            "20": NaN,
+            "21": NaN,
+            "22": NaN,
+
+            "30": 0.40,
+            "31": 0.48,
+            "32": 0.64,
+            "40": 0.36,
+            "41": 0.43,
+            "42": 0.60,
+            "50": 0.34,
+            "51": 0.40,
+            "52": 0.56,
+            "60": 0.27,
+            "61": 0.32,
+            "62": 0.45,
+            "70": 0.24,
+            "71": 0.30,
+            "72": 0.41,
+            "80": 0.22,
+            "81": 0.29,
+            "82": 0.39,
+            "90": 0.21,
+            "91": 0.28,
+            "92": 0.37,
+            "100": 0.20,
+            "101": 0.27,
+            "102": 0.36,
+            "110": 0.20,
+            "111": 0.26,
+            "112": 0.35,
+            "120": 0.19,
+            "121": 0.23,
+            "122": 0.33
+        }
+        return matrix[i + j];
     }
 }
+

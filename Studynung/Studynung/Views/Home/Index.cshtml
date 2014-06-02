@@ -27,6 +27,7 @@
 <head>
     <title>Home</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 </head>
 <body>
     <form>
@@ -95,7 +96,7 @@
             @*Питомий опір ґрунту*@
             Виберіть питомий опір ґрунту:
             @Html.ContentPickerStandart("PcResistivitySoils", ConvertHelper.ConvertResistivitySoil(resistivitySoils),
-                              "contentPicker.pcResistivitySoils")
+                "contentPicker.pcResistivitySoils")
         </fieldset>
     </form>
 
@@ -167,15 +168,69 @@
     </form>
 
     @*Continue part*@
-    <div id="div-continue">
+    <div id="div-continue" class="hideContinue">
         Виберіть відношення відстаней між електродами до їх довжини: @Html.ContentPickerStandart("PcRatioDistanceWithLength", ConvertHelper.ConvertBaseItem(ratioDistanceWithLength),
-                        "contentPicker.pcRatioDistanceWithLengthSelected")
+                                                                         "contentPicker.pcRatioDistanceWithLengthSelected")
     </div>
     <br />
-    <textarea id="area-result" style="height: 250px; width: 950px"></textarea>
+    <div id="footer">
+        <div>
+            <ul class="tabs">
+                <li><a href="#showResult">Результати</a></li>
+                <li><a href="#showErrors">Помилки</a></li>
+            </ul>
+            <div id="showResult">
+                <textarea id="area-result" style="height: 200px; width: 950px"></textarea>
+            </div>
+            <div id="showErrors">
+                <textarea id="area-errors" style="height: 200px; width: 950px">111111111111111243</textarea>
+            </div>
+        </div>
+    </div>
     <script>
+        $(".tabs").tabs();
         $(document).ready(function () {
             contentPicker.init();
+
+            // for tabs
+            $('ul.tabs').each(function () {
+                // For each set of tabs, we want to keep track of
+                // which tab is active and it's associated content
+                var $active, $content, $links = $(this).find('a');
+
+                // If the location.hash matches one of the links, use that as the active tab.
+                // If no match is found, use the first link as the initial active tab.
+                $active = $($links.filter('[href="' + location.hash + '"]')[0] || $links[0]);
+                $active.addClass('active');
+
+                $content = $($active[0].hash);
+
+                // Hide the remaining content
+                $links.not($active).each(function () {
+                    $(this.hash).hide();
+                });
+
+                // Bind the click event handler
+                $(this).on('click', 'a', function (e) {
+                    // Make the old tab inactive.
+                    $active.removeClass('active');
+                    $content.hide();
+
+                    // Update the variables with the new link and content
+                    $active = $(this);
+                    $content = $(this.hash);
+
+                    // Make the tab active.
+                    $active.addClass('active');
+                    $content.show();
+
+                    // Prevent the anchor's default click action
+                    e.preventDefault();
+                });
+            });
         });
     </script>
 </body>
+<footer style="height: 175px">
+    
+</footer>
