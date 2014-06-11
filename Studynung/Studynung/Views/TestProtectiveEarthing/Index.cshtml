@@ -1,0 +1,28 @@
+﻿@{
+   int processId = ViewBag.ProcessId;
+}
+
+<style type="text/css">.continueButton {
+     display: none;
+ }</style>
+<head>
+    <title>Home</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+</head>
+<body>
+    <div class="study-center">
+        <h2>Розрахунок захисного заземлення</h2>
+        <br/>
+        <div class="study-center" style="width: 220px">
+            <input type="button" value="Розпочати" id="btnStart"/>
+            <input type="button" value="Продовжити" id="btnContinue" class="continueButton"/>            
+        </div>
+    </div>
+    <input type="hidden" id="processId" value="@processId"/>
+    <script>
+        $(document).ready(function() {
+            studynung.page.ProtectiveEarthing.init();
+        });
+    </script>
+</body>
