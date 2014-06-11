@@ -8,7 +8,7 @@ namespace Studynung.Managers
 {
     public class BaseManager
     {
-        public readonly Studynung.Database.StudynungDbEntities DB = new StudynungDbEntities();
+        public readonly Studynung.Database.StudynungContainer DB = new StudynungContainer();
 
         public void Dispose()
         {
@@ -20,6 +20,7 @@ namespace Studynung.Managers
     {
         public User Login(string login, string password)
         {
+            
             var user = DB.Users.FirstOrDefault(u => u.Login.ToUpper() == login.ToUpper());
             if (user != null)
             {

@@ -13,10 +13,10 @@ namespace Studynung.Database
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class StudynungDbEntities : DbContext
+    public partial class StudynungContainer : DbContext
     {
-        public StudynungDbEntities()
-            : base("name=StudynungDbEntities")
+        public StudynungContainer()
+            : base("name=StudynungContainer")
         {
         }
     
@@ -26,5 +26,13 @@ namespace Studynung.Database
         }
     
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<StudentInfo> StudentInfoes { get; set; }
+        public DbSet<TeacherInfo> TeacherInfoes { get; set; }
+        public DbSet<Cathedra> Cathedras { get; set; }
+        public DbSet<AcademicGroup> AcademicGroups { get; set; }
+        public DbSet<LaboratoryWork> LaboratoryWorks { get; set; }
+        public DbSet<LaboratoryProcess> LaboratoryProcesses { get; set; }
+        public DbSet<LaboratoryResult> LaboratoryResults { get; set; }
     }
 }

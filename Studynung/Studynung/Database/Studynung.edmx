@@ -4,9 +4,46 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="StudynungDbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="StudynungDbModelStoreContainer">
-    <EntitySet Name="Users" EntityType="StudynungDbModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <Schema Namespace="Studynung.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="StudynungStoreContainer">
+    <EntitySet Name="Users" EntityType="Studynung.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Roles" EntityType="Studynung.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StudentInfoes" EntityType="Studynung.Store.StudentInfoes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TeacherInfoes" EntityType="Studynung.Store.TeacherInfoes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Cathedras" EntityType="Studynung.Store.Cathedras" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AcademicGroups" EntityType="Studynung.Store.AcademicGroups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LaboratoryWorks" EntityType="Studynung.Store.LaboratoryWorks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LaboratoryProcesses" EntityType="Studynung.Store.LaboratoryProcesses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LaboratoryResults" EntityType="Studynung.Store.LaboratoryResults" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UsersInRoles" EntityType="Studynung.Store.UsersInRoles" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_UsersInRoles_User" Association="Studynung.Store.FK_UsersInRoles_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UsersInRoles" EntitySet="UsersInRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersInRoles_Role" Association="Studynung.Store.FK_UsersInRoles_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="UsersInRoles" EntitySet="UsersInRoles" />
+    </AssociationSet>
+    <AssociationSet Name="TeacherInfoCathedra" Association="Studynung.Store.TeacherInfoCathedra">
+      <End Role="TeacherInfo" EntitySet="TeacherInfoes" />
+      <End Role="Cathedra" EntitySet="Cathedras" />
+    </AssociationSet>
+    <AssociationSet Name="StudentInfoAcademicGroup" Association="Studynung.Store.StudentInfoAcademicGroup">
+      <End Role="StudentInfo" EntitySet="StudentInfoes" />
+      <End Role="AcademicGroup" EntitySet="AcademicGroups" />
+    </AssociationSet>
+    <AssociationSet Name="UserLaboratoryProcess" Association="Studynung.Store.UserLaboratoryProcess">
+      <End Role="User" EntitySet="Users" />
+      <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+    </AssociationSet>
+    <AssociationSet Name="LaboratoryProcessLaboratoryResult" Association="Studynung.Store.LaboratoryProcessLaboratoryResult">
+      <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+      <End Role="LaboratoryResult" EntitySet="LaboratoryResults" />
+    </AssociationSet>
+    <AssociationSet Name="LaboratoryProcessLaboratoryWork" Association="Studynung.Store.LaboratoryProcessLaboratoryWork">
+      <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+      <End Role="LaboratoryWork" EntitySet="LaboratoryWorks" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Users">
     <Key>
@@ -15,59 +52,471 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Login" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MiddleName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudentInfoes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="AcademicGroup_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TeacherInfoes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="Cathedra_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Cathedras">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AcademicGroups">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LaboratoryWorks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LaboratoryProcesses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StartDateTime" Type="datetime" Nullable="true" />
+    <Property Name="EndDateTime" Type="datetime" Nullable="true" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="LaboratoryWorkId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LaboratoryResults">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Results" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Errors" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LaboratoryProcess_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UsersInRoles">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Roles_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="int" Nullable="false" />
+    <Property Name="Roles_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="TeacherInfoCathedra">
+    <End Role="TeacherInfo" Type="Studynung.Store.TeacherInfoes" Multiplicity="*" />
+    <End Role="Cathedra" Type="Studynung.Store.Cathedras" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Cathedra">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TeacherInfo">
+        <PropertyRef Name="Cathedra_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="StudentInfoAcademicGroup">
+    <End Role="StudentInfo" Type="Studynung.Store.StudentInfoes" Multiplicity="*" />
+    <End Role="AcademicGroup" Type="Studynung.Store.AcademicGroups" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="AcademicGroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentInfo">
+        <PropertyRef Name="AcademicGroup_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserLaboratoryProcess">
+    <End Role="User" Type="Studynung.Store.Users" Multiplicity="1" />
+    <End Role="LaboratoryProcess" Type="Studynung.Store.LaboratoryProcesses" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaboratoryProcess">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LaboratoryProcessLaboratoryResult">
+    <End Role="LaboratoryProcess" Type="Studynung.Store.LaboratoryProcesses" Multiplicity="1" />
+    <End Role="LaboratoryResult" Type="Studynung.Store.LaboratoryResults" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LaboratoryProcess">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaboratoryResult">
+        <PropertyRef Name="LaboratoryProcess_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LaboratoryProcessLaboratoryWork">
+    <End Role="LaboratoryProcess" Type="Studynung.Store.LaboratoryProcesses" Multiplicity="*" />
+    <End Role="LaboratoryWork" Type="Studynung.Store.LaboratoryWorks" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="LaboratoryWork">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaboratoryProcess">
+        <PropertyRef Name="LaboratoryWorkId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersInRoles_User">
+    <End Role="User" Type="Studynung.Store.Users" Multiplicity="1" />
+    <End Role="UsersInRoles" Type="Studynung.Store.UsersInRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsersInRoles">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersInRoles_Role">
+    <End Role="UsersInRoles" Type="Studynung.Store.UsersInRoles" Multiplicity="*" />
+    <End Role="Role" Type="Studynung.Store.Roles" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsersInRoles">
+        <PropertyRef Name="Roles_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="StudynungDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="StudynungDbEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="Users" EntityType="StudynungDbModel.User" />
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Studynung" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="StudynungContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Studynung.User" />
+          <EntitySet Name="Roles" EntityType="Studynung.Role" />
+          <AssociationSet Name="UsersInRoles" Association="Studynung.UsersInRoles">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+          <EntitySet Name="StudentInfoes" EntityType="Studynung.StudentInfo" />
+          <EntitySet Name="TeacherInfoes" EntityType="Studynung.TeacherInfo" />
+          <EntitySet Name="Cathedras" EntityType="Studynung.Cathedra" />
+          <EntitySet Name="AcademicGroups" EntityType="Studynung.AcademicGroup" />
+          <AssociationSet Name="TeacherInfoCathedra" Association="Studynung.TeacherInfoCathedra">
+            <End Role="TeacherInfo" EntitySet="TeacherInfoes" />
+            <End Role="Cathedra" EntitySet="Cathedras" />
+          </AssociationSet>
+          <AssociationSet Name="StudentInfoAcademicGroup" Association="Studynung.StudentInfoAcademicGroup">
+            <End Role="StudentInfo" EntitySet="StudentInfoes" />
+            <End Role="AcademicGroup" EntitySet="AcademicGroups" />
+          </AssociationSet>
+          <EntitySet Name="LaboratoryWorks" EntityType="Studynung.LaboratoryWork" />
+          <EntitySet Name="LaboratoryProcesses" EntityType="Studynung.LaboratoryProcess" />
+          <EntitySet Name="LaboratoryResults" EntityType="Studynung.LaboratoryResult" />
+          <AssociationSet Name="UserLaboratoryProcess" Association="Studynung.UserLaboratoryProcess">
+            <End Role="User" EntitySet="Users" />
+            <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+          </AssociationSet>
+          <AssociationSet Name="LaboratoryProcessLaboratoryResult" Association="Studynung.LaboratoryProcessLaboratoryResult">
+            <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+            <End Role="LaboratoryResult" EntitySet="LaboratoryResults" />
+          </AssociationSet>
+          <AssociationSet Name="LaboratoryProcessLaboratoryWork" Association="Studynung.LaboratoryProcessLaboratoryWork">
+            <End Role="LaboratoryProcess" EntitySet="LaboratoryProcesses" />
+            <End Role="LaboratoryWork" EntitySet="LaboratoryWorks" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Login" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="MiddleName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="Studynung.UsersInRoles" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="LaboratoryProcesses" Relationship="Studynung.UserLaboratoryProcess" FromRole="User" ToRole="LaboratoryProcess" />
         </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Studynung.UsersInRoles" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <Association Name="UsersInRoles">
+          <End Type="Studynung.User" Role="User" Multiplicity="*" />
+          <End Type="Studynung.Role" Role="Role" Multiplicity="*" />
+        </Association>
+        <EntityType Name="StudentInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AcademicGroup" Relationship="Studynung.StudentInfoAcademicGroup" FromRole="StudentInfo" ToRole="AcademicGroup" />
+        </EntityType>
+        <EntityType Name="TeacherInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cathedra" Relationship="Studynung.TeacherInfoCathedra" FromRole="TeacherInfo" ToRole="Cathedra" />
+        </EntityType>
+        <EntityType Name="Cathedra">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="TeacherInfo" Relationship="Studynung.TeacherInfoCathedra" FromRole="Cathedra" ToRole="TeacherInfo" />
+        </EntityType>
+        <EntityType Name="AcademicGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="StudentInfo" Relationship="Studynung.StudentInfoAcademicGroup" FromRole="AcademicGroup" ToRole="StudentInfo" />
+        </EntityType>
+        <Association Name="TeacherInfoCathedra">
+          <End Type="Studynung.TeacherInfo" Role="TeacherInfo" Multiplicity="1" />
+          <End Type="Studynung.Cathedra" Role="Cathedra" Multiplicity="1" />
+        </Association>
+        <Association Name="StudentInfoAcademicGroup">
+          <End Type="Studynung.StudentInfo" Role="StudentInfo" Multiplicity="1" />
+          <End Type="Studynung.AcademicGroup" Role="AcademicGroup" Multiplicity="1" />
+        </Association>
+        <EntityType Name="LaboratoryWork">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="LaboratoryProcesses" Relationship="Studynung.LaboratoryProcessLaboratoryWork" FromRole="LaboratoryWork" ToRole="LaboratoryProcess" />
+        </EntityType>
+        <EntityType Name="LaboratoryProcess">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" />
+          <Property Name="StartDateTime" Type="DateTime" Nullable="true" />
+          <Property Name="EndDateTime" Type="DateTime" Nullable="true" />
+          <NavigationProperty Name="User" Relationship="Studynung.UserLaboratoryProcess" FromRole="LaboratoryProcess" ToRole="User" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LaboratoryResult" Relationship="Studynung.LaboratoryProcessLaboratoryResult" FromRole="LaboratoryProcess" ToRole="LaboratoryResult" />
+          <NavigationProperty Name="LaboratoryWork" Relationship="Studynung.LaboratoryProcessLaboratoryWork" FromRole="LaboratoryProcess" ToRole="LaboratoryWork" />
+          <Property Name="LaboratoryWorkId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LaboratoryResult">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Results" Type="String" Nullable="true" />
+          <Property Name="Errors" Type="String" Nullable="true" />
+          <NavigationProperty Name="LaboratoryProcess" Relationship="Studynung.LaboratoryProcessLaboratoryResult" FromRole="LaboratoryResult" ToRole="LaboratoryProcess" />
+        </EntityType>
+        <Association Name="UserLaboratoryProcess">
+          <End Type="Studynung.User" Role="User" Multiplicity="1" />
+          <End Type="Studynung.LaboratoryProcess" Role="LaboratoryProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LaboratoryProcess">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="LaboratoryProcessLaboratoryResult">
+          <End Type="Studynung.LaboratoryProcess" Role="LaboratoryProcess" Multiplicity="1" />
+          <End Type="Studynung.LaboratoryResult" Role="LaboratoryResult" Multiplicity="0..1" />
+        </Association>
+        <Association Name="LaboratoryProcessLaboratoryWork">
+          <End Type="Studynung.LaboratoryProcess" Role="LaboratoryProcess" Multiplicity="*" />
+          <End Type="Studynung.LaboratoryWork" Role="LaboratoryWork" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="LaboratoryWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LaboratoryProcess">
+              <PropertyRef Name="LaboratoryWorkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="StudynungDbModelStoreContainer" CdmEntityContainer="StudynungDbEntities">
+  <EntityContainerMapping StorageEntityContainer="StudynungStoreContainer" CdmEntityContainer="StudynungContainer">
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="IsTypeOf(StudynungDbModel.User)">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.User)">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Login" ColumnName="Login" />
           <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
           <ScalarProperty Name="Email" ColumnName="Email" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudentInfoes">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.StudentInfo)">
+        <MappingFragment StoreEntitySet="StudentInfoes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TeacherInfoes">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.TeacherInfo)">
+        <MappingFragment StoreEntitySet="TeacherInfoes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cathedras">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.Cathedra)">
+        <MappingFragment StoreEntitySet="Cathedras">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcademicGroups">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.AcademicGroup)">
+        <MappingFragment StoreEntitySet="AcademicGroups">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaboratoryWorks">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.LaboratoryWork)">
+        <MappingFragment StoreEntitySet="LaboratoryWorks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaboratoryProcesses">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.LaboratoryProcess)">
+        <MappingFragment StoreEntitySet="LaboratoryProcesses">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+          <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LaboratoryWorkId" ColumnName="LaboratoryWorkId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaboratoryResults">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.LaboratoryResult)">
+        <MappingFragment StoreEntitySet="LaboratoryResults">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Results" ColumnName="Results" />
+          <ScalarProperty Name="Errors" ColumnName="Errors" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UsersInRoles" TypeName="Studynung.UsersInRoles" StoreEntitySet="UsersInRoles">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Users_Id" />
+      </EndProperty>
+      <EndProperty Name="Role">
+        <ScalarProperty Name="Id" ColumnName="Roles_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TeacherInfoCathedra" TypeName="Studynung.TeacherInfoCathedra" StoreEntitySet="TeacherInfoes">
+      <EndProperty Name="Cathedra">
+        <ScalarProperty Name="Id" ColumnName="Cathedra_Id" />
+      </EndProperty>
+      <EndProperty Name="TeacherInfo">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="StudentInfoAcademicGroup" TypeName="Studynung.StudentInfoAcademicGroup" StoreEntitySet="StudentInfoes">
+      <EndProperty Name="AcademicGroup">
+        <ScalarProperty Name="Id" ColumnName="AcademicGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="StudentInfo">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="LaboratoryProcessLaboratoryResult" TypeName="Studynung.LaboratoryProcessLaboratoryResult" StoreEntitySet="LaboratoryResults">
+      <EndProperty Name="LaboratoryProcess">
+        <ScalarProperty Name="Id" ColumnName="LaboratoryProcess_Id" />
+      </EndProperty>
+      <EndProperty Name="LaboratoryResult">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
-    <Connection>
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
       </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
+    </edmx:Connection>
+    <edmx:Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
-    </Options>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams></Diagrams>
-  </Designer>
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
 </edmx:Edmx>

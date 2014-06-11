@@ -1,15 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="StudynungDbModelStoreContainer" CdmEntityContainer="StudynungDbEntities">
+  <EntityContainerMapping StorageEntityContainer="StudynungStoreContainer" CdmEntityContainer="StudynungContainer">
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="IsTypeOf(StudynungDbModel.User)">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.User)">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Login" ColumnName="Login" />
           <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
           <ScalarProperty Name="Email" ColumnName="Email" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudentInfoes">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.StudentInfo)">
+        <MappingFragment StoreEntitySet="StudentInfoes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TeacherInfoes">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.TeacherInfo)">
+        <MappingFragment StoreEntitySet="TeacherInfoes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cathedras">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.Cathedra)">
+        <MappingFragment StoreEntitySet="Cathedras">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcademicGroups">
+      <EntityTypeMapping TypeName="IsTypeOf(Studynung.AcademicGroup)">
+        <MappingFragment StoreEntitySet="AcademicGroups">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UsersInRoles" TypeName="Studynung.UsersInRoles" StoreEntitySet="UsersInRoles">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Users_Id" />
+      </EndProperty>
+      <EndProperty Name="Role">
+        <ScalarProperty Name="Id" ColumnName="Roles_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TeacherInfoCathedra" TypeName="Studynung.TeacherInfoCathedra" StoreEntitySet="TeacherInfoes">
+      <EndProperty Name="Cathedra">
+        <ScalarProperty Name="Id" ColumnName="Cathedra_Id" />
+      </EndProperty>
+      <EndProperty Name="TeacherInfo">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="StudentInfoAcademicGroup" TypeName="Studynung.StudentInfoAcademicGroup" StoreEntitySet="StudentInfoes">
+      <EndProperty Name="AcademicGroup">
+        <ScalarProperty Name="Id" ColumnName="AcademicGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="StudentInfo">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

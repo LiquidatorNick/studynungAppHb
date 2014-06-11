@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.SessionState;
 using Studynung.Database;
+using Studynung.Logic;
 
 namespace Studynung.Helpers
 {
@@ -58,6 +59,38 @@ namespace Studynung.Helpers
         {
             get { return Get<User>("currentuser"); }
             set { Set("currentuser", value); }
+        }
+
+        public static bool IsAutorize
+        {
+            get { return User != null; }
+        }
+
+        public static bool IsUserAdmin()
+        {
+            if (User != null)
+            {
+                return User.Roles.Any(r => r.Name == UserRoles.Administrator.ToString());
+            }
+            return false;
+        }
+
+        public static bool IsUserTeacher()
+        {
+            if (User != null)
+            {
+                return User.Roles.Any(r => r.Name == UserRoles.Teacher.ToString());
+            }
+            return false;
+        }
+
+        public static bool IsUserStudent()
+        {
+            if (User != null)
+            {
+                return User.Roles.Any(r => r.Name == UserRoles.Student.ToString());
+            }
+            return false;
         }
     }
 }

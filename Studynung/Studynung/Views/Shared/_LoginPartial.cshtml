@@ -1,0 +1,19 @@
+﻿@using Studynung.Helpers
+<div>
+    @if (SessionHelper.IsAutorize)
+    {
+        <div class="login-autorize">
+            <span>Доброго дня, @SessionHelper.User.FirstName @SessionHelper.User.MiddleName</span>
+            <br/>
+            <div style="position: relative; left: 170px">
+                @Html.ActionLink("Вийти", "LogOut", "Auth")                
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="login">
+            @Html.ActionLink("Авторизуватись", "Login", "Auth")            
+        </div>
+    }
+</div>

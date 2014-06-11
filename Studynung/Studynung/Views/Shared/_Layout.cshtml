@@ -23,12 +23,17 @@
             </div>
             <div class="float-right">
                 <section id="login">
-                    @*@Html.Partial("_LoginPartial")*@
+                    @Html.Partial("_LoginPartial")
                 </section>
                 <nav>
-                    <ul id="menu">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Labour Protection", "Index", "Base", new { Area = "LabourProtection" }, new { })</li>
+                    <ul class="ui-ul-menu-item">
+                        <li>@Html.ActionLink("Домашня сторінка", "Index", "Home")</li>
+                        <li>
+                            <a href="#" id="btnLabs">Лабораторні роботи</a>
+                            <ul>
+                                <li>@Html.ActionLink("Захисне заземлення", "Index", "ProtectiveEarthing", new { Area = "LaboratoryWork" }, new{})</li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -50,5 +55,17 @@
 
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('.ui-ul-menu-item li').hover(function () {
+                clearTimeout($.data(this, 'timer'));
+                $('ul', this).stop(true, true).slideDown(200);
+            }, function () {
+                $.data(this, 'timer', setTimeout($.proxy(function () {
+                    $('ul', this).stop(true, true).slideUp(200);
+                }, this), 100));
+            });
+        });
+    </script>
 </body>
 </html>

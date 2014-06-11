@@ -14,9 +14,21 @@ namespace Studynung.Database
     
     public partial class User
     {
+        public User()
+        {
+            this.Roles = new HashSet<Role>();
+            this.LaboratoryProcesses = new HashSet<LaboratoryProcess>();
+        }
+    
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
+    
+        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<LaboratoryProcess> LaboratoryProcesses { get; set; }
     }
 }

@@ -4,8 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e7322fa28b0844ddaf6d2845cb04ac82" Name="Diagram1">
-        <EntityTypeShape EntityType="StudynungDbModel.User" Width="1.5" PointX="3.25" PointY="1" IsExpanded="true" />
+      <Diagram DiagramId="d14040d90a3449eebe146ef60fa5c516" Name="Diagram1" >
+        <EntityTypeShape EntityType="Studynung.User" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Studynung.Role" Width="1.5" PointX="2.75" PointY="1.125" />
+        <AssociationConnector Association="Studynung.UsersInRoles" />
+        <EntityTypeShape EntityType="Studynung.StudentInfo" Width="1.5" PointX="6.625" PointY="3.875" />
+        <EntityTypeShape EntityType="Studynung.TeacherInfo" Width="1.5" PointX="4.75" PointY="3.875" />
+        <EntityTypeShape EntityType="Studynung.Cathedra" Width="1.5" PointX="2" PointY="4.875" />
+        <EntityTypeShape EntityType="Studynung.AcademicGroup" Width="1.5" PointX="9.375" PointY="4.875" />
+        <AssociationConnector Association="Studynung.TeacherInfoCathedra" />
+        <AssociationConnector Association="Studynung.StudentInfoAcademicGroup" />
+        <EntityTypeShape EntityType="Studynung.LaboratoryWork" Width="1.75" PointX="9.75" PointY="0.625" />
+        <EntityTypeShape EntityType="Studynung.LaboratoryProcess" Width="2.25" PointX="6.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Studynung.LaboratoryResult" Width="1.75" PointX="9.75" PointY="2.625" />
+        <AssociationConnector Association="Studynung.UserLaboratoryProcess" />
+        <AssociationConnector Association="Studynung.LaboratoryProcessLaboratoryResult" />
+        <AssociationConnector Association="Studynung.LaboratoryProcessLaboratoryWork" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

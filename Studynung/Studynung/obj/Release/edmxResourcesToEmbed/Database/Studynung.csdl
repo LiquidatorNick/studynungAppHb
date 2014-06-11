@@ -1,15 +1,88 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="StudynungDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityContainer Name="StudynungDbEntities" p1:LazyLoadingEnabled="true">
-    <EntitySet Name="Users" EntityType="StudynungDbModel.User" />
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Studynung" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="StudynungContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Users" EntityType="Studynung.User" />
+    <EntitySet Name="Roles" EntityType="Studynung.Role" />
+    <AssociationSet Name="UsersInRoles" Association="Studynung.UsersInRoles">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Role" EntitySet="Roles" />
+    </AssociationSet>
+    <EntitySet Name="StudentInfoes" EntityType="Studynung.StudentInfo" />
+    <EntitySet Name="TeacherInfoes" EntityType="Studynung.TeacherInfo" />
+    <EntitySet Name="Cathedras" EntityType="Studynung.Cathedra" />
+    <EntitySet Name="AcademicGroups" EntityType="Studynung.AcademicGroup" />
+    <AssociationSet Name="TeacherInfoCathedra" Association="Studynung.TeacherInfoCathedra">
+      <End Role="TeacherInfo" EntitySet="TeacherInfoes" />
+      <End Role="Cathedra" EntitySet="Cathedras" />
+    </AssociationSet>
+    <AssociationSet Name="StudentInfoAcademicGroup" Association="Studynung.StudentInfoAcademicGroup">
+      <End Role="StudentInfo" EntitySet="StudentInfoes" />
+      <End Role="AcademicGroup" EntitySet="AcademicGroups" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-    <Property Name="Login" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" />
+    <Property Name="MiddleName" Type="String" Nullable="false" />
+    <Property Name="LastName" Type="String" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" />
+    <NavigationProperty Name="Roles" Relationship="Studynung.UsersInRoles" FromRole="User" ToRole="Role" />
   </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="Studynung.UsersInRoles" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <Association Name="UsersInRoles">
+    <End Type="Studynung.User" Role="User" Multiplicity="*" />
+    <End Type="Studynung.Role" Role="Role" Multiplicity="*" />
+  </Association>
+  <EntityType Name="StudentInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AcademicGroup" Relationship="Studynung.StudentInfoAcademicGroup" FromRole="StudentInfo" ToRole="AcademicGroup" />
+  </EntityType>
+  <EntityType Name="TeacherInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cathedra" Relationship="Studynung.TeacherInfoCathedra" FromRole="TeacherInfo" ToRole="Cathedra" />
+  </EntityType>
+  <EntityType Name="Cathedra">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="TeacherInfo" Relationship="Studynung.TeacherInfoCathedra" FromRole="Cathedra" ToRole="TeacherInfo" />
+  </EntityType>
+  <EntityType Name="AcademicGroup">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="StudentInfo" Relationship="Studynung.StudentInfoAcademicGroup" FromRole="AcademicGroup" ToRole="StudentInfo" />
+  </EntityType>
+  <Association Name="TeacherInfoCathedra">
+    <End Type="Studynung.TeacherInfo" Role="TeacherInfo" Multiplicity="1" />
+    <End Type="Studynung.Cathedra" Role="Cathedra" Multiplicity="1" />
+  </Association>
+  <Association Name="StudentInfoAcademicGroup">
+    <End Type="Studynung.StudentInfo" Role="StudentInfo" Multiplicity="1" />
+    <End Type="Studynung.AcademicGroup" Role="AcademicGroup" Multiplicity="1" />
+  </Association>
 </Schema>

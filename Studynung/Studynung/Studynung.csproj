@@ -128,12 +128,30 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\LabourProtection\Controllers\BaseController.cs" />
-    <Compile Include="Areas\LabourProtection\Controllers\ProtectiveEarthingController.cs" />
-    <Compile Include="Areas\LabourProtection\LabourProtectionAreaRegistration.cs" />
+    <Compile Include="Areas\LaboratoryWork\Controllers\ProtectiveEarthingController.cs" />
+    <Compile Include="Areas\LaboratoryWork\LaboratoryWorkAreaRegistration.cs" />
     <Compile Include="Controllers\AuthController.cs" />
-    <Compile Include="Controllers\DBController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Database\AcademicGroup.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Cathedra.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\LaboratoryProcess.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\LaboratoryResult.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\LaboratoryWork.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Role.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\StudentInfo.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\Studynung.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -149,14 +167,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Studynung.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Database\TeacherInfo.cs">
+      <DependentUpon>Studynung.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\User.cs">
       <DependentUpon>Studynung.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ContentHelper.cs" />
+    <Compile Include="Helpers\ConvertHelper.cs" />
+    <Compile Include="Controllers\DBController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\AuthSystem.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Logic\LaboratoryStatus.cs" />
+    <Compile Include="Logic\UserRoles.cs" />
+    <Compile Include="Managers\LaboratoryManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -313,28 +342,23 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Studynung.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Database\Studynung.edmx.diagram">
+      <DependentUpon>Studynung.edmx</DependentUpon>
+    </Content>
     <Content Include="Database\Studynung.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Studynung.edmx</DependentUpon>
       <LastGenOutput>Studynung.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Database\Studynung.edmx.diagram">
       <DependentUpon>Studynung.edmx</DependentUpon>
     </Content>
     <Content Include="Database\Studynung.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Studynung.edmx</DependentUpon>
       <LastGenOutput>Studynung.cs</LastGenOutput>
+      <DependentUpon>Studynung.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\LabourProtection\Views\Web.config" />
-    <Content Include="Areas\LabourProtection\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\Base\Index.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Index.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Menu.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Partials\_menu.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Partials\_title.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Partials\_theory.cshtml" />
-    <Content Include="Areas\LabourProtection\Views\ProtectiveEarthing\Partials\_calc.cshtml" />
+    <Content Include="Areas\LaboratoryWork\Views\Web.config" />
+    <Content Include="Areas\LaboratoryWork\Views\ProtectiveEarthing\Index.cshtml" />
+    <Content Include="Areas\LaboratoryWork\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\LaboratoryWork\Views\ProtectiveEarthing\Calculation.cshtml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Content\Images\Logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -372,11 +396,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Scripts\Studynung\studynung.page.js" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\LabourProtection\Models\" />
-    <Folder Include="Areas\LabourProtection\Views\Shared\" />
+    <Folder Include="Areas\LaboratoryWork\Models\" />
+    <Folder Include="Areas\LaboratoryWork\Views\Shared\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
   </ItemGroup>

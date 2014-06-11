@@ -2,33 +2,24 @@
 "undefined" == typeof studynung.page && (studynung.page = {});
 
 studynung.page.ProtectiveEarthing = {
-	loadTitle: function () {
-		this._loadPartial('/LabourProtection/ProtectiveEarthing/Title');
-	},
-	initTitle: function () {
-		$("#btnStart").click(function () {
-			studynung.page.ProtectiveEarthing._loadPartial('/LabourProtection/ProtectiveEarthing/Menu');
-		});
-	},
-	initMenu: function () {
-		$("#btnDocs").click(function () {
-			studynung.page.ProtectiveEarthing._loadPartial('/LabourProtection/ProtectiveEarthing/Theory');
-		});
-		$("#btnCalc").click(function () {
-			studynung.page.ProtectiveEarthing._loadPartial('/LabourProtection/ProtectiveEarthing/Calc');
-		});
-	},
-	_loadPartial: function (url) {
-		$.ajax({
-			url: url,
-			type: 'GET',
-			cache: false,
-			dataType: "html",
-			success: function (data, textStatus, jqXHR) {
-				$('#baseContent').html(data);
-			}
-		});
-	}
+    init: function (id) {
+        this.processId = id;
+        if (this.processId != -1) {
+            $("#btnContinue").fadeToggle();
+        }
+        $("#btnStart").click(function () {
+            
+            if (studynung.page.ProtectiveEarthing.processId != -1) {
+                var result = confirm("Ви впевнені, що хочите розпочати цю лабораторну роботу знову?");
+                if (result == true) {
+                    window.location.href = "ProtectiveEarthing/Calculation";
+                }
+            } else {
+                window.location.href = "ProtectiveEarthing/Calculation";
+            }
+        });
+
+    }
 }
 
 studynung.page.ProtectiveEarthing.calc = {

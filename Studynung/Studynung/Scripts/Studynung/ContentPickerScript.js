@@ -2,6 +2,8 @@
 "undefined" == typeof logManager && (logManager = {});
 contentPicker = {
     init: function () {
+        this.resultsId = $("#labsResultId").val();
+
         this.countGroundingId = -1;
         this.firstPlacementElectrodesId = -1;
         this.groundDeviceTypeId = -1;
@@ -92,38 +94,10 @@ contentPicker = {
     },
 
     verificationData: function () {
-        var items = {
-            CountGroundingId: this.countGroundingId,
-            FirstPlacementElectrodesId: this.firstPlacementElectrodesId,
-            GroundDeviceTypeId: this.groundDeviceTypeId,
-            LocationElectodesId: this.locationElectrodesId,
-            MaterialId: this.materialId,
-            ProfileSectionsId: this.profileSectionsId,
-            ResistivitySoilsId: this.resistivitySoilsId,
-            TypeSoilsId: this.typeSoilsId,
-            FirstTypeElectrodeId: this.firstTypeElectrodeId,
-            SecondTypeElectrodeId: this.secondTypeElectrodeId,
-            FirstLengthElectrodeId: this.firstLengthElectrodeId,
-            SecondLengthElectrodeId: this.secondLengthElectrodeId,
-            HeavenId: this.heavenId,
-            HumidityId: this.humidityId,
-            FirstGroundItemTypeId: this.firstGroundItemTypeId,
-            SecondGroundItemTypeId: this.secondGroundItemTypeId,
-            FirstFormulaId: this.firstFormulaId,
-            SecondFormulaId: this.secondFormulaId
-        }
-        $.ajax({
-            url: "Home/VerificationData",
-            type: 'POST',
-            cache: false,
-            dataType: "html",
-            data: items,
-            success: function () {
-            }
-        });
         contentPicker._verifyIds();
         contentPicker._applyVerify();
         contentPicker._toLog();
+        contentPicker._saveChanges();
     },
     _verifyIds: function () {
         this.isGroupGrounding = this.countGroundingId == 1;
@@ -260,6 +234,67 @@ contentPicker = {
                 logManager.appendLine("Rз: " + fieldsManager.Rz);
         }
         logManager.show();
+    },
+    _saveChanges: function () {
+        var items = {
+            Id : this.resultsId,
+            CountGroundingId: this.countGroundingId,
+            FirstPlacementElectrodesId: this.firstPlacementElectrodesId,
+            GroundDeviceTypeId: this.groundDeviceTypeId,
+            LocationElectrodesId: this.locationElectrodesId,
+            MaterialId: this.materialId,
+            ProfileSectionsId: this.profileSectionsId,
+            TypeSoilsId: this.typeSoilsId,
+            ResistivitySoilsId: this.resistivitySoilsId,
+            FirstTypeElectrodeId: this.firstTypeElectrodeId,
+            SecondTypeElectrodeId: this.secondTypeElectrodeId,
+            FirstLengthElectrodeId: this.firstLengthElectrodeId,
+            SecondLengthElectrodeId: this.secondLengthElectrodeId,
+            HeavenId: this.heavenId,
+            HumidityId: this.humidityId,
+            FirstGroundItemTypeId: this.firstGroundItemTypeId,
+            SecondGroundItemTypeId: this.secondGroundItemTypeId,
+            FirstFormulaId: this.firstFormulaId,
+            SecondFormulaId: this.secondFormulaId,
+            RatioDistanceWithLength: this.ratioDistanceWithLength,
+
+            ValueRdop: fieldsManager.Rdop.toString(),
+            ValueLvert: fieldsManager.Lvert.toString(),
+            ValueLhoriz: fieldsManager.Lhoriz.toString(),
+            ValueKcVertical: fieldsManager.KcVertical.toString(),
+            ValueKcHoriz: fieldsManager.KcHoriz.toString(),
+            ValueRovym: fieldsManager.Rovym.toString(),
+            Valuea: fieldsManager.a.toString(),
+            Valueb: fieldsManager.b.toString(),
+            Valuet: fieldsManager.t.toString(),
+            Valuet0: fieldsManager.t0.toString(),
+            Valued: fieldsManager.d.toString(),
+            ValueDUpper: fieldsManager.D.toString(),
+            ValueRorVert: fieldsManager.RorVert.toString(),
+            ValueRorHoriz: fieldsManager.RorHoriz.toString(),
+            ValueRvert: fieldsManager.Rvert.toString(),
+            ValueRhoriz: fieldsManager.Rhoriz.toString(),
+            ValueRz: fieldsManager.Rz.toString(),
+            ValuecountElectrodes: fieldsManager.countElectrodes.toString(),
+            ValuecountElectrodesWithoutNude: fieldsManager.countElectrodesWithoutNude.toString(),
+            ValuecountElectrodesWithNude: fieldsManager.countElectrodesWithNude.toString(),
+            ValuenudeVert: fieldsManager.nudeVert.toString(),
+            ValuenudeHoriz: fieldsManager.nudeHoriz.toString(),
+            ValueratioDistanceWithLength: fieldsManager.ratioDistanceWithLength.toString(),
+
+            Results: logManager.getText(),
+            Errors: logManager.getText()
+        };
+
+        $.ajax({
+            url: '/ProtectiveEarthing/SaveChanges',
+            type: 'POST',
+            cache: false,
+            dataType: "html",
+            data: items,
+            success: function () {
+            }
+        });
     },
 
     continueToCompute: function () {
@@ -427,7 +462,6 @@ logManager = {
     init: function (id) {
         this.resultContentId = id;
         this.text = '';
-
     },
     clear: function () {
         this.text = '';
@@ -437,6 +471,9 @@ logManager = {
     },
     show: function () {
         $(this.resultContentId).val(this.text);
+    },
+    getText: function () {
+        return this.text;
     }
 }
 

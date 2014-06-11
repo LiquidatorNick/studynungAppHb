@@ -30,5 +30,11 @@ namespace Studynung.Controllers
             }
             return View();
         }
+
+        public ActionResult LogOut()
+        {
+            SessionHelper.User = null;
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
